@@ -1,0 +1,155 @@
+.survey-form-container {
+    padding: 2rem 2.5rem;
+    background-color: #F8F7F4;
+    min-height: calc(100vh - 64px);
+  }
+  
+  .survey-form-content {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .form-header {
+    margin-bottom: 2.5rem;
+  }
+  
+  .form-header h1 {
+    font-size: 28px;
+    color: #333;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+  }
+  
+  .form-header p {
+    color: #666;
+    font-size: 14px;
+  }
+  
+  .form-body h2 {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+  }
+  
+  .form-group {
+    margin-bottom: 2rem;
+  }
+  
+  .form-group label {
+    display: block;
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 0.5rem;
+  }
+  
+  .form-input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #E0E0E0;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #333;
+    background: white;
+  }
+  
+  .form-input:focus {
+    outline: none;
+    border-color: #90A99E;
+  }
+  
+  .sample-prompts-section {
+    margin: 2rem 0;
+  }
+  
+  .sample-prompt-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 1rem;
+    color: #333;
+    font-size: 14px;
+  }
+  
+  .bulb-icon {
+    color: #FFB800;
+    font-size: 16px;
+  }
+  
+  .prompt-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  
+  .prompt-card {
+    background: white;
+    border: 1px solid #E0E0E0;
+    border-radius: 8px;
+    padding: 1rem;
+    transition: all 0.2s ease;
+  }
+  
+  .prompt-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transform: translateY(-2px);
+  }
+  
+  .prompt-card h3 {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+  }
+  
+  .prompt-card p {
+    font-size: 12px;
+    color: #666;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  .prompt-button {
+    width: 100%;
+    padding: 8px;
+    background: white;
+    border: 1px solid #E0E0E0;
+    border-radius: 6px;
+    color: #333;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .prompt-button:hover {
+    background: #F5F5F5;
+  }
+  
+  .form-textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: 12px 16px;
+    border: 1px solid #E0E0E0;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #333;
+    resize: vertical;
+    line-height: 1.5;
+  }
+  
+  .form-textarea:focus {
+    outline: none;
+    border-color: #90A99E;
+  }
+  
+  .character-count {
+    display: block;
+    font-size: 12px;
+    color: #666;
+    margin-top: 0.5rem;
+  }
