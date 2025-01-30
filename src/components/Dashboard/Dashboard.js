@@ -2,7 +2,8 @@ import React from 'react';
 import './Dashboard.css';
 import SurveyCard from '../SurveyCard/SurveyCard';
 import { ReactComponent as MessageIcon } from '../../assets/message-icon.svg';
-// import { FaBell } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
+
 const Dashboard = () => {
   const surveyData = [
     {
@@ -23,6 +24,8 @@ const Dashboard = () => {
     }
   ];
 
+  const navigate = useNavigate();
+
   return (
     <div className="dashboard">
       <div className="dashboard-header">
@@ -30,7 +33,7 @@ const Dashboard = () => {
           <h2>Welcome User!</h2>
           <p>Turn Survey Into Actionable Insights</p>
         </div>
-        <button className="create-survey-btn">
+        <button className="create-survey-btn" onClick={() => navigate('/create-survey')}>
           <span>+</span> Create New Survey
         </button>
       </div>
@@ -94,3 +97,4 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+
