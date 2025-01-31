@@ -62,6 +62,12 @@ const SurveyBuilder = () => {
       title: 'Survey',
       icon: '📝',
       type: 'survey'
+    },
+    { 
+      id: 'range', 
+      title: 'Range',
+      icon: '⟺',
+      type: 'range'
     }
   ]);
 
@@ -303,6 +309,36 @@ const SurveyBuilder = () => {
             />
             <div className="signature-preview">
               <span className="preview-icon">✍</span> Add signature
+            </div>
+          </div>
+        );
+
+      case 'range':
+        return (
+          <div className="question-preview">
+            <input
+              type="text"
+              value={question.title}
+              onChange={(e) => handleQuestionChange(index, 'title', e.target.value)}
+              placeholder="Range question"
+              className="question-input"
+            />
+            <div className="range-preview">
+              <input 
+                type="range" 
+                min="0" 
+                max="100" 
+                defaultValue="50"
+                className="range-input"
+                disabled
+              />
+              <div className="range-labels">
+                <span>Poor</span>
+                <span>Below Average</span>
+                <span>Average</span>
+                <span>Good</span>
+                <span>Excellent</span>
+              </div>
             </div>
           </div>
         );

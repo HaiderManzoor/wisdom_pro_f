@@ -260,3 +260,59 @@
     font-size: 1.2em;
     margin-right: 8px;
   }
+
+.range-preview {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border: 1px solid #E0E0E0;
+  border-radius: 4px;
+}
+
+.range-input {
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(to right, #ff4d4d, #ffad4d, #4CAF50, #2196F3, #4CAF50);
+  border-radius: 2px;
+  appearance: none;
+  -webkit-appearance: none;
+  margin-bottom: 15px;
+}
+
+.range-input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  background: #fff;
+  border: 2px solid #90A99E;
+  border-radius: 50%;
+  cursor: not-allowed;
+}
+
+.range-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  color: #666;
+  font-size: 12px;
+  padding: 0 10px;
+}
+
+.range-labels span {
+  text-align: center;
+  position: relative;
+  width: 80px; /* Fixed width for better alignment */
+}
+
+/* Make the range slider look disabled */
+.range-input:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Add color indicators for each label */
+.range-labels span:nth-child(1) { color: #ff4d4d; }
+.range-labels span:nth-child(2) { color: #ffad4d; }
+.range-labels span:nth-child(3) { color: #4CAF50; }
+.range-labels span:nth-child(4) { color: #2196F3; }
+.range-labels span:nth-child(5) { color: #4CAF50; }
