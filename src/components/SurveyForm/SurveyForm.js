@@ -46,10 +46,15 @@ const SurveyForm = () => {
 
           <div className="form-group">
             <label>Write a prompt to generate your survey*</label>
-            <textarea 
-              className="form-textarea"
-              placeholder="I work for a consulting firm and we're looking to gather feedback from our clients about their experience working with us. The survey should cover customer satisfaction..."
-            />
+            <div className="textarea-container">
+              <textarea 
+                className="form-textarea"
+                placeholder="I work for a consulting firm and we're looking to gather feedback from our clients about their experience working with us. The survey should cover customer satisfaction..."
+              />
+              <button className="submit-button">
+                Submit
+              </button>
+            </div>
             <span className="character-count">Tell us what you want (3000 characters)</span>
           </div>
         </div>
