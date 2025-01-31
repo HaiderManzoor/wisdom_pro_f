@@ -323,8 +323,16 @@ const SurveyBuilder = () => {
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
           >
-            <h3>Survey Structure</h3>
-            <p className="structure-subtitle">Create your survey structure here</p>
+            <div className="structure-header">
+              <div>
+                <h3>Survey Structure</h3>
+                <p className="structure-subtitle">Create your survey structure here</p>
+              </div>
+              <button className="preview-survey-btn">
+                <span className="preview-icon">👁</span>
+                Preview Survey
+              </button>
+            </div>
             
             <div className="questions-container">
               {survey.questions.map((question, index) => (
