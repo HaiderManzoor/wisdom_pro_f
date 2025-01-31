@@ -53,26 +53,26 @@
   }
   
   .block-item {
-    background: white;
-    border: 1px solid #E0E0E0;
-    border-radius: 8px;
-    padding: 16px;
-    cursor: move;
-    transition: all 0.2s ease;
     display: flex;
     align-items: center;
-    gap: 12px;
+    padding: 12px;
+    background: #FFF8E7;
+    border: 1px solid #FFE4B5;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    cursor: move;
+    transition: all 0.2s ease;
   }
   
   .block-item:hover {
-    border-color: #90A99E;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    transform: translateY(-1px);
+    background: #FFE4B5;
   }
   
   .block-icon {
+    margin-right: 12px;
+    display: flex;
+    align-items: center;
     color: #666;
-    font-size: 20px;
   }
   
   .block-text {
@@ -139,13 +139,14 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    margin: 8px 0;
+    margin-bottom: 8px;
   }
   
   .rating-preview {
-    margin-top: 12px;
     display: flex;
     gap: 8px;
+    color: #FFD700;
+    font-size: 24px;
   }
   
   .star {
@@ -163,4 +164,99 @@
   .dragging {
     opacity: 0.5;
     transform: scale(0.95);
+  }
+  /* Add these new styles to your existing CSS */
+
+.question-preview {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .question-input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #E0E0E0;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+  
+  .answer-textarea {
+    width: 100%;
+    min-height: 80px;
+    padding: 12px;
+    border: 1px solid #E0E0E0;
+    border-radius: 4px;
+    font-size: 14px;
+    resize: none;
+    background-color: #f9f9f9;
+  }
+  
+  .answer-textarea::placeholder {
+    color: #999;
+  }
+  
+  .question-block {
+    background: white;
+    border: 1px solid #E0E0E0;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 12px;
+    animation: slideIn 0.3s ease;
+  }
+  
+  .question-input:focus,
+  .answer-textarea:focus {
+    outline: none;
+    border-color: #90A99E;
+  }
+  
+  .answer-preview {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #E0E0E0;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+  }
+  
+  .date-preview,
+  .location-preview,
+  .attachment-preview,
+  .camera-preview,
+  .signature-preview {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #E0E0E0;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #666;
+    cursor: not-allowed;
+  }
+  
+  .option-input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #E0E0E0;
+    border-radius: 4px;
+  }
+  
+  .add-option-btn {
+    padding: 8px 16px;
+    background: none;
+    border: 1px dashed #90A99E;
+    border-radius: 4px;
+    color: #90A99E;
+    cursor: pointer;
+    margin-top: 8px;
+  }
+  
+  .add-option-btn:hover {
+    background: #f5f5f5;
+  }
+  .preview-icon {
+    font-size: 1.2em;
+    margin-right: 8px;
   }

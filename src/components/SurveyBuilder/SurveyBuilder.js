@@ -5,33 +5,63 @@ const SurveyBuilder = () => {
   const [components] = useState([
     { 
       id: 'text', 
-      title: 'Add your question here', 
-      icon: 'T',
-      type: 'text-input'
+      title: 'Text',
+      icon: 'Tt',
+      type: 'text'
+    },
+    { 
+      id: 'written-answer', 
+      title: 'Written answer',
+      icon: '✎',
+      type: 'written-answer'
+    },
+    { 
+      id: 'multiple-choice', 
+      title: 'Multiple choice',
+      icon: '◉',
+      type: 'multiple-choice'
     },
     { 
       id: 'rating', 
-      title: 'Add your question here', 
+      title: 'Rating',
       icon: '★',
       type: 'rating'
     },
     { 
-      id: 'radio', 
-      title: 'Add your question here', 
-      icon: '○',
-      type: 'radio'
+      id: 'date', 
+      title: 'Date and time',
+      icon: '📅',
+      type: 'date'
     },
     { 
-      id: 'dropdown', 
-      title: 'Add your question here', 
-      icon: '▼',
-      type: 'dropdown'
+      id: 'location', 
+      title: 'Location',
+      icon: '📍',
+      type: 'location'
     },
     { 
-      id: 'checkbox', 
-      title: 'Add your question here', 
-      icon: '☐',
-      type: 'checkbox'
+      id: 'attachment', 
+      title: 'Attachment',
+      icon: '📎',
+      type: 'attachment'
+    },
+    { 
+      id: 'camera', 
+      title: 'Camera',
+      icon: '📷',
+      type: 'camera'
+    },
+    { 
+      id: 'signature', 
+      title: 'Signature',
+      icon: '✍',
+      type: 'signature'
+    },
+    { 
+      id: 'survey', 
+      title: 'Survey',
+      icon: '📝',
+      type: 'survey'
     }
   ]);
 
@@ -39,6 +69,27 @@ const SurveyBuilder = () => {
     title: '',
     questions: []
   });
+
+  const handleQuestionChange = (index, field, value) => {
+    const newQuestions = [...survey.questions];
+    newQuestions[index][field] = value;
+    setSurvey({ ...survey, questions: newQuestions });
+  };
+
+  const handleOptionChange = (questionIndex, optionIndex, value) => {
+    const newQuestions = [...survey.questions];
+    newQuestions[questionIndex].options[optionIndex] = value;
+    setSurvey({ ...survey, questions: newQuestions });
+  };
+
+  const addOption = (questionIndex) => {
+    const newQuestions = [...survey.questions];
+    if (!newQuestions[questionIndex].options) {
+      newQuestions[questionIndex].options = [];
+    }
+    newQuestions[questionIndex].options.push(`Option ${newQuestions[questionIndex].options.length + 1}`);
+    setSurvey({ ...survey, questions: newQuestions });
+  };
 
   const handleDragStart = (e, component) => {
     try {
@@ -70,7 +121,9 @@ const SurveyBuilder = () => {
       const componentData = JSON.parse(e.dataTransfer.getData('application/json'));
       const newQuestion = {
         id: Date.now(),
-        ...componentData
+        title: '',
+        ...componentData,
+        options: componentData.type === 'multiple-choice' ? ['Option 1', 'Option 2'] : []
       };
       
       setSurvey(prev => ({
@@ -79,6 +132,183 @@ const SurveyBuilder = () => {
       }));
     } catch (error) {
       console.error('Drop error:', error);
+    }
+  };
+
+  const renderQuestionPreview = (question, index) => {
+    switch(question.type) {
+      case 'text':
+        return (
+          <div className="question-preview">
+            <input
+              type="text"
+              value={question.title}
+              onChange={(e) => handleQuestionChange(index, 'title', e.target.value)}
+              placeholder="Short text question"
+              className="question-input"
+            />
+            <input
+              type="text"
+              disabled
+              placeholder="Short answer text"
+              className="answer-preview"
+            />
+          </div>
+        );
+
+      case 'written-answer':
+        return (
+          <div className="question-preview">
+            <input
+              type="text"
+              value={question.title}
+              onChange={(e) => handleQuestionChange(index, 'title', e.target.value)}
+              placeholder="Long answer question"
+              className="question-input"
+            />
+            <textarea
+              disabled
+              placeholder="Long answer text"
+              className="answer-textarea"
+            ></textarea>
+          </div>
+        );
+
+      case 'multiple-choice':
+        return (
+          <div className="question-preview">
+            <input
+              type="text"
+              value={question.title}
+              onChange={(e) => handleQuestionChange(index, 'title', e.target.value)}
+              placeholder="Multiple choice question"
+              className="question-input"
+            />
+            <div className="options-container">
+              {question.options?.map((option, optIndex) => (
+                <div key={optIndex} className="option">
+                  <input type="radio" disabled />
+                  <input
+                    type="text"
+                    value={option}
+                    onChange={(e) => handleOptionChange(index, optIndex, e.target.value)}
+                    placeholder={`Option ${optIndex + 1}`}
+                    className="option-input"
+                  />
+                </div>
+              ))}
+              <button 
+                className="add-option-btn"
+                onClick={() => addOption(index)}
+              >
+                Add Option
+              </button>
+            </div>
+          </div>
+        );
+
+      case 'rating':
+        return (
+          <div className="question-preview">
+            <input
+              type="text"
+              value={question.title}
+              onChange={(e) => handleQuestionChange(index, 'title', e.target.value)}
+              placeholder="Rating question"
+              className="question-input"
+            />
+            <div className="rating-preview">
+              {[1,2,3,4,5].map(star => (
+                <span key={star} className="star">★</span>
+              ))}
+            </div>
+          </div>
+        );
+
+      case 'date':
+        return (
+          <div className="question-preview">
+            <input
+              type="text"
+              value={question.title}
+              onChange={(e) => handleQuestionChange(index, 'title', e.target.value)}
+              placeholder="Date question"
+              className="question-input"
+            />
+            <input
+              type="date"
+              disabled
+              className="date-preview"
+            />
+          </div>
+        );
+
+      case 'location':
+        return (
+          <div className="question-preview">
+            <input
+              type="text"
+              value={question.title}
+              onChange={(e) => handleQuestionChange(index, 'title', e.target.value)}
+              placeholder="Location question"
+              className="question-input"
+            />
+            <div className="location-preview">
+              <span className="preview-icon">📍</span> Select location
+            </div>
+          </div>
+        );
+
+      case 'attachment':
+        return (
+          <div className="question-preview">
+            <input
+              type="text"
+              value={question.title}
+              onChange={(e) => handleQuestionChange(index, 'title', e.target.value)}
+              placeholder="Attachment question"
+              className="question-input"
+            />
+            <div className="attachment-preview">
+              <span className="preview-icon">📎</span> Add attachment
+            </div>
+          </div>
+        );
+
+      case 'camera':
+        return (
+          <div className="question-preview">
+            <input
+              type="text"
+              value={question.title}
+              onChange={(e) => handleQuestionChange(index, 'title', e.target.value)}
+              placeholder="Camera question"
+              className="question-input"
+            />
+            <div className="camera-preview">
+              <span className="preview-icon">📷</span> Take photo
+            </div>
+          </div>
+        );
+
+      case 'signature':
+        return (
+          <div className="question-preview">
+            <input
+              type="text"
+              value={question.title}
+              onChange={(e) => handleQuestionChange(index, 'title', e.target.value)}
+              placeholder="Signature question"
+              className="question-input"
+            />
+            <div className="signature-preview">
+              <span className="preview-icon">✍</span> Add signature
+            </div>
+          </div>
+        );
+
+      default:
+        return null;
     }
   };
 
@@ -125,35 +355,7 @@ const SurveyBuilder = () => {
             <div className="questions-container">
               {survey.questions.map((question, index) => (
                 <div key={question.id} className="question-block">
-                  <input
-                    type="text"
-                    value={question.title}
-                    onChange={(e) => {
-                      const newQuestions = [...survey.questions];
-                      newQuestions[index].title = e.target.value;
-                      setSurvey({ ...survey, questions: newQuestions });
-                    }}
-                    placeholder="Add your question here"
-                  />
-                  {question.type === 'radio' && (
-                    <div className="options-container">
-                      <div className="option">
-                        <input type="radio" disabled />
-                        <span>Option 1</span>
-                      </div>
-                      <div className="option">
-                        <input type="radio" disabled />
-                        <span>Option 2</span>
-                      </div>
-                    </div>
-                  )}
-                  {question.type === 'rating' && (
-                    <div className="rating-preview">
-                      {[1,2,3,4,5].map(star => (
-                        <span key={star} className="star">★</span>
-                      ))}
-                    </div>
-                  )}
+                  {renderQuestionPreview(question, index)}
                 </div>
               ))}
               {survey.questions.length === 0 && (
