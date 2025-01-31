@@ -141,204 +141,142 @@ const SurveyBuilder = () => {
     }
   };
 
+  const handleDeleteQuestion = (indexToDelete) => {
+    setSurvey(prev => ({
+      ...prev,
+      questions: prev.questions.filter((_, index) => index !== indexToDelete)
+    }));
+  };
+
   const renderQuestionPreview = (question, index) => {
+    const questionWrapper = (content) => (
+      <div className="question-preview">
+        <div className="question-header">
+          <input
+            type="text"
+            value={question.title}
+            onChange={(e) => handleQuestionChange(index, 'title', e.target.value)}
+            placeholder="Add your question here"
+            className="question-input"
+          />
+          <button 
+            className="delete-question"
+            onClick={() => handleDeleteQuestion(index)}
+          >
+            ✕
+          </button>
+        </div>
+        {content}
+      </div>
+    );
+
     switch(question.type) {
       case 'text':
-        return (
-          <div className="question-preview">
-            <input
-              type="text"
-              value={question.title}
-              onChange={(e) => handleQuestionChange(index, 'title', e.target.value)}
-              placeholder="Short text question"
-              className="question-input"
-            />
-            <input
-              type="text"
-              disabled
-              placeholder="Short answer text"
-              className="answer-preview"
-            />
-          </div>
+        return questionWrapper(
+          <input
+            type="text"
+            disabled
+            placeholder="Short answer text"
+            className="answer-preview"
+          />
         );
 
       case 'written-answer':
-        return (
-          <div className="question-preview">
-            <input
-              type="text"
-              value={question.title}
-              onChange={(e) => handleQuestionChange(index, 'title', e.target.value)}
-              placeholder="Long answer question"
-              className="question-input"
-            />
-            <textarea
-              disabled
-              placeholder="Long answer text"
-              className="answer-textarea"
-            ></textarea>
-          </div>
+        return questionWrapper(
+          <textarea
+            disabled
+            placeholder="Long answer text"
+            className="answer-textarea"
+          ></textarea>
         );
 
       case 'multiple-choice':
-        return (
-          <div className="question-preview">
-            <input
-              type="text"
-              value={question.title}
-              onChange={(e) => handleQuestionChange(index, 'title', e.target.value)}
-              placeholder="Multiple choice question"
-              className="question-input"
-            />
-            <div className="options-container">
-              {question.options?.map((option, optIndex) => (
-                <div key={optIndex} className="option">
-                  <input type="radio" disabled />
-                  <input
-                    type="text"
-                    value={option}
-                    onChange={(e) => handleOptionChange(index, optIndex, e.target.value)}
-                    placeholder={`Option ${optIndex + 1}`}
-                    className="option-input"
-                  />
-                </div>
-              ))}
-              <button 
-                className="add-option-btn"
-                onClick={() => addOption(index)}
-              >
-                Add Option
-              </button>
-            </div>
+        return questionWrapper(
+          <div className="options-container">
+            {question.options?.map((option, optIndex) => (
+              <div key={optIndex} className="option">
+                <input type="radio" disabled />
+                <input
+                  type="text"
+                  value={option}
+                  onChange={(e) => handleOptionChange(index, optIndex, e.target.value)}
+                  placeholder={`Option ${optIndex + 1}`}
+                  className="option-input"
+                />
+              </div>
+            ))}
+            <button 
+              className="add-option-btn"
+              onClick={() => addOption(index)}
+            >
+              Add Option
+            </button>
           </div>
         );
 
       case 'rating':
-        return (
-          <div className="question-preview">
-            <input
-              type="text"
-              value={question.title}
-              onChange={(e) => handleQuestionChange(index, 'title', e.target.value)}
-              placeholder="Rating question"
-              className="question-input"
-            />
-            <div className="rating-preview">
-              {[1,2,3,4,5].map(star => (
-                <span key={star} className="star">★</span>
-              ))}
-            </div>
+        return questionWrapper(
+          <div className="rating-preview">
+            {[1,2,3,4,5].map(star => (
+              <span key={star} className="star">★</span>
+            ))}
           </div>
         );
 
       case 'date':
-        return (
-          <div className="question-preview">
-            <input
-              type="text"
-              value={question.title}
-              onChange={(e) => handleQuestionChange(index, 'title', e.target.value)}
-              placeholder="Date question"
-              className="question-input"
-            />
-            <input
-              type="date"
-              disabled
-              className="date-preview"
-            />
-          </div>
+        return questionWrapper(
+          <input
+            type="date"
+            disabled
+            className="date-preview"
+          />
         );
 
       case 'location':
-        return (
-          <div className="question-preview">
-            <input
-              type="text"
-              value={question.title}
-              onChange={(e) => handleQuestionChange(index, 'title', e.target.value)}
-              placeholder="Location question"
-              className="question-input"
-            />
-            <div className="location-preview">
-              <span className="preview-icon">📍</span> Select location
-            </div>
+        return questionWrapper(
+          <div className="location-preview">
+            <span className="preview-icon">📍</span> Select location
           </div>
         );
 
       case 'attachment':
-        return (
-          <div className="question-preview">
-            <input
-              type="text"
-              value={question.title}
-              onChange={(e) => handleQuestionChange(index, 'title', e.target.value)}
-              placeholder="Attachment question"
-              className="question-input"
-            />
-            <div className="attachment-preview">
-              <span className="preview-icon">📎</span> Add attachment
-            </div>
+        return questionWrapper(
+          <div className="attachment-preview">
+            <span className="preview-icon">📎</span> Add attachment
           </div>
         );
 
       case 'camera':
-        return (
-          <div className="question-preview">
-            <input
-              type="text"
-              value={question.title}
-              onChange={(e) => handleQuestionChange(index, 'title', e.target.value)}
-              placeholder="Camera question"
-              className="question-input"
-            />
-            <div className="camera-preview">
-              <span className="preview-icon">📷</span> Take photo
-            </div>
+        return questionWrapper(
+          <div className="camera-preview">
+            <span className="preview-icon">📷</span> Take photo
           </div>
         );
 
       case 'signature':
-        return (
-          <div className="question-preview">
-            <input
-              type="text"
-              value={question.title}
-              onChange={(e) => handleQuestionChange(index, 'title', e.target.value)}
-              placeholder="Signature question"
-              className="question-input"
-            />
-            <div className="signature-preview">
-              <span className="preview-icon">✍</span> Add signature
-            </div>
+        return questionWrapper(
+          <div className="signature-preview">
+            <span className="preview-icon">✍</span> Add signature
           </div>
         );
 
       case 'range':
-        return (
-          <div className="question-preview">
-            <input
-              type="text"
-              value={question.title}
-              onChange={(e) => handleQuestionChange(index, 'title', e.target.value)}
-              placeholder="Range question"
-              className="question-input"
+        return questionWrapper(
+          <div className="range-preview">
+            <input 
+              type="range" 
+              min="0" 
+              max="100" 
+              defaultValue="50"
+              className="range-input"
+              disabled
             />
-            <div className="range-preview">
-              <input 
-                type="range" 
-                min="0" 
-                max="100" 
-                defaultValue="50"
-                className="range-input"
-                disabled
-              />
-              <div className="range-labels">
-                <span>Poor</span>
-                <span>Below Average</span>
-                <span>Average</span>
-                <span>Good</span>
-                <span>Excellent</span>
-              </div>
+            <div className="range-labels">
+              <span>Poor</span>
+              <span>Below Average</span>
+              <span>Average</span>
+              <span>Good</span>
+              <span>Excellent</span>
             </div>
           </div>
         );
