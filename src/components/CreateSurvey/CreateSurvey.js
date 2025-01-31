@@ -9,6 +9,10 @@ const CreateSurvey = () => {
     navigate('/survey-form');
   };
 
+  const handleBuildWithAI = () => {
+    navigate('/survey-builder');
+  };
+
   return (
     <div className="create-survey-container">
       <div className="create-survey-content">
@@ -25,14 +29,12 @@ const CreateSurvey = () => {
               </svg>
             </div>
             <h3>Start from scratch</h3>
-            <p>Begin with a blank survey or form. Then add your questions, text, and images</p>
+            <p>Create a survey form from scratch with our easy-to-use builder.</p>
           </div>
 
-          <div className="option-card">
-            <div className="icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <path d="M19 3H5C3.9 3 3 3.9 3 5v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z" fill="currentColor"/>
-              </svg>
+          <div className="option-card" onClick={handleBuildWithAI}>
+            <div className="icon-container">
+              <span className="plus-icon">+</span>
             </div>
             <h3>Build with AI</h3>
             <p>Type a short prompt. AI will create a tailored survey or a form just for you.</p>
