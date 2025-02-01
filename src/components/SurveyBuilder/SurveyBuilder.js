@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './SurveyBuilder.css';
+import SurveyPreview from '../SurveyPreview/SurveyPreview';
 
 const SurveyBuilder = () => {
   const [components] = useState([
@@ -76,6 +77,8 @@ const SurveyBuilder = () => {
     questions: []
   });
 
+  const [showPreview, setShowPreview] = useState(false);
+
   const handleQuestionChange = (index, field, value) => {
     const newQuestions = [...survey.questions];
     newQuestions[index][field] = value;
@@ -145,6 +148,13 @@ const SurveyBuilder = () => {
     setSurvey(prev => ({
       ...prev,
       questions: prev.questions.filter((_, index) => index !== indexToDelete)
+    }));
+  };
+
+  const handleTitleChange = (e) => {
+    setSurvey(prev => ({
+      ...prev,
+      title: e.target.value
     }));
   };
 
@@ -287,69 +297,94 @@ const SurveyBuilder = () => {
   };
 
   return (
-    <div className="survey-builder-container">
-      <div className="survey-builder-header">
-        <h1>Create New Survey</h1>
-        <p>Turn Survey Into Actionable Insights</p>
-      </div>
+    <>
+      <div className="survey-builder-container">
+        <div className="survey-builder-header">
+          <h1>Create New Survey</h1>
+          <p>Turn Survey Into Actionable Insights</p>
+        </div>
 
-      <div className="survey-builder-content">
-        <h2>Make structure of your survey here</h2>
-        
-        <div className="survey-builder-workspace">
-          <div className="available-blocks">
-            <h3>Available Blocks</h3>
-            <p className="blocks-subtitle">Drag blocks to build your survey structure</p>
-            
-            <div className="blocks-container">
-              {components.map(component => (
-                <div
-                  key={component.id}
-                  className="block-item"
-                  draggable="true"
-                  onDragStart={(e) => handleDragStart(e, component)}
-                  onDragEnd={handleDragEnd}
-                >
-                  <span className="block-icon">{component.icon}</span>
-                  <span className="block-text">{component.title}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div 
-            className="survey-structure"
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
-          >
-            <div className="structure-header">
-              <div>
-                <h3>Survey Structure</h3>
-                <p className="structure-subtitle">Create your survey structure here</p>
+        <div className="survey-builder-content">
+          <h2>Make structure of your survey here</h2>
+          
+          <div className="survey-builder-workspace">
+            <div className="available-blocks">
+              <h3>Available Blocks</h3>
+              <p className="blocks-subtitle">Drag blocks to build your survey structure</p>
+              
+              <div className="blocks-container">
+                {components.map(component => (
+                  <div
+                    key={component.id}
+                    className="block-item"
+                    draggable="true"
+                    onDragStart={(e) => handleDragStart(e, component)}
+                    onDragEnd={handleDragEnd}
+                  >
+                    <span className="block-icon">{component.icon}</span>
+                    <span className="block-text">{component.title}</span>
+                  </div>
+                ))}
               </div>
-              <button className="preview-survey-btn">
-                <span className="preview-icon">👁</span>
-                Preview Survey
-              </button>
             </div>
-            
-            <div className="questions-container">
-              {survey.questions.map((question, index) => (
-                <div key={question.id} className="question-block">
-                  {renderQuestionPreview(question, index)}
+
+            <div 
+              className="survey-structure"
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+            >
+              <div className="structure-header">
+                <div>
+                  <h3>Survey Structure</h3>
+                  <p className="structure-subtitle">Create your survey structure here</p>
                 </div>
-              ))}
-              {survey.questions.length === 0 && (
-                <div className="empty-state">
-                  Drag blocks here to start building your survey
+                <button 
+                  className="preview-survey-btn"
+                  onClick={() => setShowPreview(true)}
+                >
+                  <span className="preview-icon">👁</span>
+                  Preview Survey
+                </button>
+              </div>
+              
+              <div className="survey-content">
+                <div className="survey-title-section">
+                  <input
+                    type="text"
+                    value={survey.title}
+                    onChange={handleTitleChange}
+                    placeholder="Enter survey title"
+                    className="survey-title-input"
+                  />
+                  <p className="survey-subtitle">Please enter the title of your survey</p>
                 </div>
-              )}
+
+                <div className="questions-container">
+                  {survey.questions.map((question, index) => (
+                    <div key={question.id} className="question-block">
+                      {renderQuestionPreview(question, index)}
+                    </div>
+                  ))}
+                  {survey.questions.length === 0 && (
+                    <div className="empty-state">
+                      Drag blocks here to start building your survey
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+
+      {showPreview && (
+        <SurveyPreview 
+          survey={survey}
+          onClose={() => setShowPreview(false)}
+        />
+      )}
+    </>
   );
 };
 
