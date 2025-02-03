@@ -1,0 +1,110 @@
+.insights-container {
+    padding: 2rem;
+    background-color: #f8f8f8;
+    min-height: 100vh;
+  }
+  
+  .insights-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+  
+  .header-left h1 {
+    font-size: 24px;
+    color: #333;
+    margin: 0;
+  }
+  
+  .header-left p {
+    color: #666;
+    margin: 4px 0 0;
+  }
+  
+  .create-survey-btn {
+    background: #90A99E;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s;
+  }
+  
+  .create-survey-btn:hover {
+    background: #7B938A;
+  }
+  
+  .charts-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  
+  .chart-card {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  }
+  
+  .chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  
+  .chart-header h3 {
+    font-size: 16px;
+    color: #333;
+    margin: 0;
+  }
+  
+  .expand-btn {
+    background: none;
+    border: none;
+    color: #90A99E;
+    cursor: pointer;
+    font-size: 18px;
+  }
+  
+  .expand-btn:hover {
+    color: #7B938A;
+  }
+  
+  @media (max-width: 1200px) {
+    .charts-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .charts-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  /* Add to your existing styles */
+.loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f8f8f8;
+  }
+  
+  .loading-spinner {
+    color: #2E7B67;
+    font-size: 18px;
+    padding: 20px;
+  }
+  
+  /* Make sure the container is visible */
+  .insights-container {
+    min-height: calc(100vh - 64px); /* Adjust based on your header height */
+    background-color: #f8f8f8;
+    padding: 24px;
+    box-sizing: border-box;
+  }

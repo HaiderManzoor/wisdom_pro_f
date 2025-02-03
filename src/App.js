@@ -5,6 +5,7 @@ import Dashboard from './components/Dashboard/Dashboard';
 import CreateSurvey from './components/CreateSurvey/CreateSurvey';
 import SurveyForm from './components/SurveyForm/SurveyForm';
 import SurveyBuilder from './components/SurveyBuilder/SurveyBuilder';
+import SurveyInsights from './components/SurveyInsights/SurveyInsights';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/create-survey" element={<CreateSurvey />} />
           <Route path="/survey-form" element={<SurveyForm />} />
           <Route path="/survey-builder" element={<SurveyBuilder />} />
+          <Route path="/insights" element={<SurveyInsights />} />
         </Routes>
       </div>
     </Router>
