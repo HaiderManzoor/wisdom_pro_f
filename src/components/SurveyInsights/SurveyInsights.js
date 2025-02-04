@@ -50,7 +50,8 @@ const SurveyInsights = () => {
       <div className="insights-header">
         <div className="header-left">
           <h1>Survey Insights</h1>
-          <p>Turn Survey Into Actionable Insights</p>
+          <div>
+          <p>Turn Survey Into Actionable Insights</p></div>
         </div>
         <button className="create-survey-btn">
           + Create New Survey
