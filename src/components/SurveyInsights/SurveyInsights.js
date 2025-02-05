@@ -1,222 +1,369 @@
+// import React from 'react';
+// import {
+//   LineChart, Line, ScatterChart, Scatter,
+//   XAxis, YAxis, CartesianGrid, Tooltip,
+//   PieChart, Pie, Cell,
+//   ResponsiveContainer
+// } from 'recharts';
+// import './SurveyInsights.css';
+
+// const SurveyInsights = () => {
+//   // Metrics data with exact values from image
+//   const metrics = [
+//     { icon: "📊", label: "Total Responses", value: "10" },
+//     { icon: "⏱", label: "Time Spent (Average)", value: "15s" },
+//     { icon: "📈", label: "Positive Responses", value: "65%" },
+//     { icon: "📉", label: "Negative Responses", value: "34%" }
+//   ];
+
+//   // Tab options exactly as shown
+//   const tabOptions = ['Overall View', 'Sub topics', 'Growth intensity'];
+
+//   // Generate dummy data for trend lines
+//   const generateTrendData = () => Array(20).fill().map((_, i) => ({
+//     x: i,
+//     y: Math.sin(i * 0.3) * 10 + 50
+//   }));
+
+//   // Topic table data with varying stats lengths
+//   const topicTableData = [
+//     { name: '1. Product', trend: generateTrendData(), stats: 15 },
+//     { name: '1. Product', trend: generateTrendData(), stats: 45 },
+//     { name: '1. Product', trend: generateTrendData(), stats: 75 },
+//     { name: '1. Product', trend: generateTrendData(), stats: 95 },
+//     { name: '1. Product', trend: generateTrendData(), stats: 25 },
+//     { name: '1. Product', trend: generateTrendData(), stats: 60 },
+//     { name: '1. Product', trend: generateTrendData(), stats: 80 }
+//   ];
+
+//   // Scatter plot data matching exactly with image
+//   const scatterData = [
+//     { x: 20, y: 60, color: '#FF9A9A' },
+//     { x: 40, y: 40, color: '#A5D6A7' },
+//     { x: 60, y: 70, color: '#FF9A9A' },
+//     { x: 70, y: 35, color: '#A5D6A7' },
+//     { x: 80, y: 50, color: '#FF9A9A' },
+//     { x: 90, y: 25, color: '#A5D6A7' }
+//   ];
+
+//   // Concerning points
+//   const concerningPoints = [
+//     'Work-Life Balance Issues, Long hours, high stress.',
+//     'Career Growth Concerns, Limited training, slow promotions.',
+//     'Poor Communication',
+//     'Misunderstanding/unclear instructions',
+//     'Low Employee Morale (lack of recognition, motivation)',
+//     'High Turnover Rate - Frequent resignations, dissatisfaction.'
+//   ];
+
+//   return (
+//     <div className="insights-container">
+//       {/* Metrics Row */}
+//       <div className="metrics-row">
+//         {metrics.map((metric, index) => (
+//           <div key={index} className="metric-card">
+//             <div className="metric-icon">{metric.icon}</div>
+//             <div className="metric-content">
+//               <div className="metric-label">{metric.label}</div>
+//               <div className="metric-value">{metric.value}</div>
+//             </div>
+//           </div>
+//         ))}
+//       </div>
+
+//       {/* Tab Options */}
+//       <div className="tab-strip">
+//         {tabOptions.map((tab, index) => (
+//           <button 
+//             key={index} 
+//             className={`tab-button ${index === 0 ? 'active' : ''}`}
+//           >
+//             {tab}
+//           </button>
+//         ))}
+//       </div>
+
+//       {/* Topic Table */}
+//       <div className="topic-table">
+//         <div className="table-header">
+//           <div className="header-left">Topic Table</div>
+//           <div className="header-right">
+//             <span>Topics</span>
+//             <span>Trend</span>
+//             <span>Stats</span>
+//           </div>
+//         </div>
+//         <div className="table-content">
+//           {topicTableData.map((topic, index) => (
+//             <div key={index} className="table-row">
+//               <div className="topic-name">{topic.name}</div>
+//               <div className="trend-chart">
+//                 <ResponsiveContainer width={100} height={20}>
+//                   <LineChart data={topic.trend}>
+//                     <Line 
+//                       type="monotone" 
+//                       dataKey="y" 
+//                       stroke="#2196F3" 
+//                       dot={false}
+//                       strokeWidth={1}
+//                     />
+//                   </LineChart>
+//                 </ResponsiveContainer>
+//               </div>
+//               <div className="stats-bar-wrapper">
+//                 <div 
+//                   className="stats-bar"
+//                   style={{ width: `${topic.stats}%` }}
+//                 />
+//               </div>
+//             </div>
+//           ))}
+//         </div>
+//       </div>
+
+//       {/* Topics Scatter Plot */}
+//       <div className="topics-chart">
+//         <div className="card-header">
+//           <h3>Topics</h3>
+//           <span className="trending-label">Trending Topics →</span>
+//         </div>
+//         <ResponsiveContainer width="100%" height={300}>
+//           <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
+//             <CartesianGrid strokeDasharray="3 3" />
+//             <XAxis type="number" domain={[0, 100]} />
+//             <YAxis type="number" domain={[0, 100]} />
+//             <Scatter data={scatterData}>
+//               {scatterData.map((entry, index) => (
+//                 <Cell key={index} fill={entry.color} />
+//               ))}
+//             </Scatter>
+//           </ScatterChart>
+//         </ResponsiveContainer>
+//       </div>
+
+//       {/* Concerning Points */}
+//       <div className="concerning-points">
+//         <div className="card-header">
+//           <h3>concerning points</h3>
+//           <span className="arrow">→</span>
+//         </div>
+//         <ul>
+//           {concerningPoints.map((point, index) => (
+//             <li key={index}>{`${index + 1}. ${point}`}</li>
+//           ))}
+//         </ul>
+//       </div>
+
+//       {/* Sentiment Ratio */}
+//       <div className="sentiment-ratio">
+//         <div className="card-header">
+//           <h3>Sentiment Ratio</h3>
+//         </div>
+//         <ResponsiveContainer width="100%" height={300}>
+//           <PieChart>
+//             <Pie
+//               data={[
+//                 { name: 'Positive', value: 45, color: '#A5D6A7' },
+//                 { name: 'Negative', value: 35, color: '#FF9A9A' },
+//                 { name: 'Neutral', value: 20, color: '#FFE082' }
+//               ]}
+//               innerRadius={60}
+//               outerRadius={80}
+//               paddingAngle={2}
+//               dataKey="value"
+//             >
+//               {(entry, index) => (
+//                 <Cell key={index} fill={entry.color} />
+//               )}
+//             </Pie>
+//           </PieChart>
+//         </ResponsiveContainer>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default SurveyInsights;
 import React from 'react';
 import {
-  PieChart, Pie,
-  BarChart, Bar,
-  XAxis, YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-  Cell 
+    LineChart, Line, ScatterChart, Scatter,
+    XAxis, YAxis, CartesianGrid, Tooltip,
+    PieChart, Pie, Cell,
+    ResponsiveContainer
 } from 'recharts';
 import './SurveyInsights.css';
 
 const SurveyInsights = () => {
-  // Dummy data for charts
-  const pieData = [
-    { name: 'Remote', value: 35 },
-    { name: 'Hybrid', value: 45 },
-    { name: 'On-site', value: 20 }
-  ];
+    // Metrics data with exact values from image
+    const metrics = [
+        { icon: "📊", label: "Total Responses", value: "10" },
+        { icon: "⏱", label: "Time Spent (Average)", value: "18s" },
+        { icon: "📈", label: "Positive Responses", value: "65%" },
+        { icon: "📉", label: "Negative Responses", value: "34%" }
+    ];
 
-  const satisfactionData = [
-    { name: 'Satisfied', value: 65 },
-    { name: 'Neutral', value: 25 },
-    { name: 'Unsatisfied', value: 10 }
-  ];
+    // Tab options exactly as shown
+    const tabOptions = ['Overall View', 'Sub topics', 'Growth intensity'];
 
-  const barData = [
-    {
-      category: 'Communication',
-      Current: 85,
-      Previous: 70,
-    },
-    {
-      category: 'Work-Life Balance',
-      Current: 65,
-      Previous: 60,
-    },
-    {
-      category: 'Resources',
-      Current: 75,
-      Previous: 65,
-    }
-  ];
+    // Generate dummy data for trend lines
+    const generateTrendData = () => Array(20).fill().map((_, i) => ({
+        x: i,
+        y: Math.sin(i * 0.3) * 10 + 50
+    }));
 
-  const COLORS = ['#7B938A', '#D6B981', '#B5C4B1'];
+    // Topic table data with varying stats lengths
+    const topicTableData = [
+        { name: '1. Product', trend: generateTrendData(), stats: 67 },
+        { name: '1. Product', trend: generateTrendData(), stats: 67 },
+        { name: '1. Product', trend: generateTrendData(), stats: 67 },
+        { name: '1. Product', trend: generateTrendData(), stats: 67 },
+        { name: '1. Product', trend: generateTrendData(), stats: 67 },
+        { name: '1. Product', trend: generateTrendData(), stats: 67 },
+        { name: '1. Product', trend: generateTrendData(), stats: 67 },
+        { name: '1. Product', trend: generateTrendData(), stats: 67 },
+        { name: '1. Product', trend: generateTrendData(), stats: 67 },
+        { name: '1. Product', trend: generateTrendData(), stats: 67 },
+        { name: '1. Product', trend: generateTrendData(), stats: 67 },
+        { name: '1. Product', trend: generateTrendData(), stats: 67 }
+    ];
 
-  return (
-    <div className="insights-container">
-      <div className="insights-header">
-        <div className="header-left">
-          <h1>Survey Insights</h1>
-          <div>
-          <p>Turn Survey Into Actionable Insights</p></div>
-        </div>
-        <button className="create-survey-btn">
-          + Create New Survey
-        </button>
-      </div>
+    // Scatter plot data matching exactly with image
+    const scatterData = [
+        { x: -80, y: -20, color: '#FF9A9A', label: 'Product' },
+        { x: -40, y: 40, color: '#A5D6A7', label: 'Product' },
+        { x: -40, y: -60, color: '#FF9A9A', label: 'Product' },
+        { x: 0, y: -80, color: '#A5D6A7', label: 'Product' },
+        { x: 20, y: 60, color: '#FF9A9A', label: 'Product' },
+        { x: 30, y: 50, color: '#A5D6A7', label: 'Product' },
+        { x: 60, y: -20, color: '#FF9A9A', label: 'Product' },
+        { x: 70, y: 35, color: '#A5D6A7', label: 'Product' },
+        { x: 80, y: 50, color: '#FF9A9A', label: 'Product' },
+        { x: 80, y: -60, color: '#A5D6A7', label: 'Product' },
+        { x: 100, y: 80, color: '#FF9A9A', label: 'Product' },
+        { x: -100, y: 100, color: '#A5D6A7', label: 'Product' },
+        { x: -100, y: -100, color: '#FF9A9A', label: 'Product' },
+    ];
 
-      <div className="charts-grid">
-        {/* First Row */}
-        <div className="chart-card">
-          <div className="chart-header">
-            <h3>Q1. What is the office environment?</h3>
-            <button className="expand-btn">→</button>
-          </div>
-          <ResponsiveContainer width="100%" height={300}>
-            <PieChart>
-              <Pie
-                data={pieData}
-                cx="50%"
-                cy="50%"
-                outerRadius={80}
-                fill="#8884d8"
-                dataKey="value"
-                label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-              >
-                {pieData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+    // Concerning points
+    const concerningPoints = [
+        'Work-Life Balance Issues, Long hours, high stress.',
+        'Career Growth Concerns, Limited training, slow promotions.',
+        'Poor Communication',
+        'Misunderstanding/unclear instructions',
+        'Low Employee Morale (lack of recognition, motivation)',
+        'High Turnover Rate - Frequent resignations, dissatisfaction.'
+    ];
+
+    const COLORS = ['#A5D6A7', '#FF9A9A', '#FFE082', '#90CAF9'];
+
+    const pieData = [
+        { name: 'Positive', value: 50 },
+        { name: 'Negative', value: 15 },
+        { name: 'Mixed', value: 10 },
+        { name: 'Neutral', value: 25 },
+    ];
+    return (
+        <div className="dashboard-container">
+            {/* Metrics Section */}
+            <div className="metrics-section">
+                {metrics.map((metric, index) => (
+                    <div className="metric-box" key={index}>
+                        <h3>{metric.label}</h3>
+                        <p>{metric.value}</p>
+                    </div>
                 ))}
-              </Pie>
-              <Tooltip />
-              <Legend />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
+            </div>
 
-        <div className="chart-card">
-          <div className="chart-header">
-            <h3>Q2. Overall satisfaction level?</h3>
-            <button className="expand-btn">→</button>
-          </div>
-          <ResponsiveContainer width="100%" height={300}>
-            <PieChart>
-              <Pie
-                data={satisfactionData}
-                cx="50%"
-                cy="50%"
-                innerRadius={60}
-                outerRadius={80}
-                fill="#8884d8"
-                dataKey="value"
-                label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-              >
-                {satisfactionData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+            {/* Tab Section */}
+            <div className="tab-section">
+                {tabOptions.map((tab, index) => (
+                    <button className={`tab ${index === 0 ? 'active' : ''}`} key={index}>{tab}</button>
                 ))}
-              </Pie>
-              <Tooltip />
-              <Legend />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
+            </div>
 
-        <div className="chart-card">
-          <div className="chart-header">
-            <h3>Q3. Department performance metrics</h3>
-            <button className="expand-btn">→</button>
-          </div>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={barData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="category" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="Current" fill="#7B938A" />
-              <Bar dataKey="Previous" fill="#D6B981" />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
+            {/* Content Section */}
+            <div className="content-section">
+                {/* Topic Table */}
+                <div className="topic-table">
+                    <h2>Topic Table</h2>
+                    <div className="table-content">
+                        <div className="table-header">
+                            <span>Topics</span>
+                            <span>Trend</span>
+                            <span>Stats</span>
+                        </div>
+                        {topicTableData.map((topic, index) => (
+                            <div className="table-row" key={index}>
+                                <span>{topic.name}</span>
+                                <ResponsiveContainer width={100} height={30}>
+                                    <LineChart data={topic.trend}>
+                                        <Line type="monotone" dataKey="y" stroke="#8884d8" strokeWidth={2} dot={false} />
+                                    </LineChart>
+                                </ResponsiveContainer>
+                                <div className="stats-bar-wrapper">
+                                    <div className="stats-bar" style={{ width: `${topic.stats}%`, backgroundColor: topic.stats >= 50 ? '#4CAF50' : '#F44336' }}></div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
 
-        {/* Second Row - Similar charts with different data */}
-        <div className="chart-card">
-          <div className="chart-header">
-            <h3>Q4. Team collaboration score</h3>
-            <button className="expand-btn">→</button>
-          </div>
-          <ResponsiveContainer width="100%" height={300}>
-            <PieChart>
-              <Pie
-                data={[
-                  { name: 'High', value: 45 },
-                  { name: 'Medium', value: 35 },
-                  { name: 'Low', value: 20 }
-                ]}
-                cx="50%"
-                cy="50%"
-                innerRadius={60}
-                outerRadius={80}
-                fill="#8884d8"
-                dataKey="value"
-                label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-              >
-                {pieData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                ))}
-              </Pie>
-              <Tooltip />
-              <Legend />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
+                {/* Topics Chart */}
+                <div className="topics-chart">
+                    <h2>Topics</h2>
+                    <ResponsiveContainer width="100%" height={300}>
+                        <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis type="number" dataKey="x" name="X" domain={[-100, 100]} />
+                            <YAxis type="number" dataKey="y" name="Y" domain={[-100, 100]} />
+                            <Tooltip cursor={{ strokeDasharray: '3 3' }} />
+                            <Scatter name="Product" data={scatterData} fill="#8884d8">
+                                {
+                                    scatterData.map((entry, index) => (
+                                        <Cell key={`cell-${index}`} fill={entry.color} />
+                                    ))
+                                }
+                            </Scatter>
+                        </ScatterChart>
+                    </ResponsiveContainer>
+                </div>
+            </div>
+            <div className="concerning-points" style={{ width: '48%', marginTop: '20px' }}>
+                <h3>Concerning Points</h3>
+                <ul>
+                    {concerningPoints.map((point, index) => (
+                        <li key={index}>{point}</li>
+                    ))}
+                </ul>
+            </div>
 
-        <div className="chart-card">
-          <div className="chart-header">
-            <h3>Q5. Resource utilization</h3>
-            <button className="expand-btn">→</button>
-          </div>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={[
-              { category: 'Tools', Current: 80, Previous: 65 },
-              { category: 'Training', Current: 70, Previous: 55 },
-              { category: 'Support', Current: 85, Previous: 70 }
-            ]}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="category" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="Current" fill="#7B938A" />
-              <Bar dataKey="Previous" fill="#D6B981" />
-            </BarChart>
-          </ResponsiveContainer>
+            {/* Sentiment Analysis Chart */}
+            <div className="sentiment-chart" style={{ width: '48%', marginTop: '20px' }}>
+                <h3>Sentiment Ratio</h3>
+                <ResponsiveContainer width="100%" height={300}>
+                    <PieChart>
+                        <Pie
+                            data={pieData}
+                            cx="50%"
+                            cy="50%"
+                            labelLine={false}
+                            outerRadius={80}
+                            fill="#8884d8"
+                            dataKey="value"
+                            label
+                        >
+                            {
+                                pieData.map((entry, index) => (
+                                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                ))
+                            }
+                        </Pie>
+                        <Tooltip />
+                    </PieChart>
+                </ResponsiveContainer>
+            </div>
         </div>
-
-        <div className="chart-card">
-          <div className="chart-header">
-            <h3>Q6. Employee engagement</h3>
-            <button className="expand-btn">→</button>
-          </div>
-          <ResponsiveContainer width="100%" height={300}>
-            <PieChart>
-              <Pie
-                data={[
-                  { name: 'High', value: 55 },
-                  { name: 'Medium', value: 30 },
-                  { name: 'Low', value: 15 }
-                ]}
-                cx="50%"
-                cy="50%"
-                outerRadius={80}
-                fill="#8884d8"
-                dataKey="value"
-                label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-              >
-                {pieData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                ))}
-              </Pie>
-              <Tooltip />
-              <Legend />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default SurveyInsights;
