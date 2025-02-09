@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import './SurveyBuilder.css';
 import SurveyPreview from '../SurveyPreview/SurveyPreview';
+import { API_URL } from '../../config'; // Import API URL
+
 
 const SurveyBuilder = () => {
   const [components] = useState([
@@ -296,6 +298,33 @@ const SurveyBuilder = () => {
     }
   };
 
+  const handleCreateSurvey = async () => {
+    if (!survey.title || survey.questions.length === 0) {
+        alert("Survey title and at least one question are required.");
+        return;
+    }
+
+    try {
+        const response = await fetch(`${API_URL}/api/surveys/create`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ title: survey.title, questions: survey.questions }),
+        });
+
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || "Failed to create survey.");
+
+        console.log("✅ Survey Created:", result.survey); // Debugging
+        setSurvey(prev => ({ ...prev, id: result.survey.id })); // ✅ Store ID
+
+    } catch (error) {
+        console.error("❌ Error creating survey:", error);
+        alert("Error creating survey. Please try again.");
+    }
+};
+
+
+  
   return (
     <>
       <div className="survey-builder-container">

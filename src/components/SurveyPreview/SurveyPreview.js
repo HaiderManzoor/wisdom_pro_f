@@ -1,8 +1,53 @@
-import React from 'react';
+
+// export default SurveyPreview;
+import React, { useState } from 'react';
 import Header from '../Header/Header';
 import './SurveyPreview.css';
+import { API_URL } from '../../config'; // Import API URL
 
-const SurveyPreview = ({ survey, onClose }) => {
+const SurveyPreview = ({ survey, setSurvey, onClose }) => {
+  const [isSubmitting, setIsSubmitting] = useState(false); // Loading state
+
+  if (!survey || !survey.questions) {
+      return <div>Loading survey...</div>; 
+  }
+
+  console.log("Survey Data:", survey); 
+  console.log("Survey ID:", survey.id || "ID NOT SET"); 
+
+  const handleSubmitSurvey = async () => {
+    if (!survey) {
+        alert("Survey ID is missing! Please create the survey first.");
+        return;
+    }
+
+    console.log("Submitting Survey with ID:", survey.id); 
+
+    try {
+        const response = await fetch(`${API_URL}/api/surveys/submit`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                responses: survey.questions.map((q) => ({
+                    question: q.title,
+                    type: q.type,
+                    options: q.options || [],
+                })),
+            }),
+        });
+
+        if (!response.ok) throw new Error("Failed to submit survey.");
+        alert("Survey submitted successfully!");
+
+    } catch (error) {
+        console.error("❌ Error submitting survey:", error);
+        alert("Error submitting survey. Please try again.");
+    }
+};
+
+
+
+
   return (
     <div className="preview-container">
       <Header />
@@ -81,9 +126,14 @@ const SurveyPreview = ({ survey, onClose }) => {
         <div className="preview-actions">
           <div className="preview-size">1139 x 1090</div>
           <div className="action-buttons">
-            <button className="action-btn">
-              <span className="icon">👁</span> View insights
+            <button 
+              className="action-btn" 
+              onClick={handleSubmitSurvey} 
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Submitting..." : "Submit Survey"}
             </button>
+
             <button className="action-btn" onClick={onClose}>
               <span className="icon">✕</span> Close preview
             </button>
