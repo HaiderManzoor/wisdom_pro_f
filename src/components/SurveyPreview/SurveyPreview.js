@@ -131,7 +131,7 @@ import './SurveyPreview.css';
           <div className="preview-size">1139 x 1090</div>
           <div className="action-buttons">
             <button className="action-btn" onClick={handleViewInsights}>
-              <span className="icon">👁</span> View insights
+              <span className="icon">👁</span> Submit Survey
             </button>
             <button className="action-btn" onClick={onClose}>
               <span className="icon">✕</span> Close preview
