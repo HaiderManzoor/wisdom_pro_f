@@ -9,6 +9,7 @@ import './SurveyPreview.css';
         console.log("Attempting to store survey data:", survey);
         const { data: surveyData, error: surveyError } = await supabase
     .from('surveys')
+    .insert([{ title: survey.title, user_id: 1 }]) 
     .select("*")
     .eq('user_id', 1)
     .order('created_at', { ascending: false })
