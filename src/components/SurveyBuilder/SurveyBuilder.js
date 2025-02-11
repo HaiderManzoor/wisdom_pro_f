@@ -3,6 +3,22 @@ import './SurveyBuilder.css';
 import SurveyPreview from '../SurveyPreview/SurveyPreview';
 
 const SurveyBuilder = () => {
+
+  const initializeAutocomplete = (e, index) => {
+    if (!window.google) {
+      console.error("Google Maps API not loaded.");
+      return;
+    }
+  
+    const autocomplete = new window.google.maps.places.Autocomplete(e.target);
+    autocomplete.addListener('place_changed', () => {
+      const place = autocomplete.getPlace();
+      if (place && place.formatted_address) {
+        handleQuestionChange(index, 'location', place.formatted_address);
+      }
+    });
+  };
+  
   const [components] = useState([
     { 
       id: 'text', 
@@ -224,38 +240,69 @@ const SurveyBuilder = () => {
           </div>
         );
 
-      case 'rating':
-        return questionWrapper(
-          <div className="rating-preview">
-            {[1,2,3,4,5].map(star => (
-              <span key={star} className="star">★</span>
-            ))}
-          </div>
-        );
+        case 'rating':
+          return questionWrapper(
+            <div className="rating-preview">
+              {[1, 2, 3, 4, 5].map(star => (
+                <span 
+                  key={star} 
+                  className={`star ${question.selectedRating >= star ? 'selected' : ''}`}
+                  onClick={() => handleQuestionChange(index, 'selectedRating', star)}
+                >
+                  ★
+                </span>
+              ))}
+            </div>
+          );
 
-      case 'date':
-        return questionWrapper(
-          <input
-            type="date"
-            disabled
-            className="date-preview"
-          />
-        );
-
-      case 'location':
-        return questionWrapper(
-          <div className="location-preview">
-            <span className="preview-icon">📍</span> Select location
-          </div>
-        );
-
-      case 'attachment':
-        return questionWrapper(
-          <div className="attachment-preview">
-            <span className="preview-icon">📎</span> Add attachment
-          </div>
-        );
-
+          case 'date':
+            return questionWrapper(
+              <input
+                type="datetime-local"
+                value={question.date || ''}
+                onChange={(e) => handleQuestionChange(index, 'date', e.target.value)}
+                className="date-preview"
+              />
+            );
+          
+            case 'location':
+              return questionWrapper(
+                <input
+                  type="text"
+                  className="location-preview"
+                  placeholder="Search location"
+                  value={question.location || ''}
+                  onChange={(e) => handleQuestionChange(index, 'location', e.target.value)}
+                  onFocus={(e) => initializeAutocomplete(e, index)}
+                />
+              );
+            
+              case 'attachment':
+                return questionWrapper(
+                  <div className="attachment-preview">
+                    <label className="attachment-label">
+                      <input
+                        type="file"
+                        className="attachment-input"
+                        onChange={(e) => handleQuestionChange(index, 'attachment', e.target.files[0])}
+                      />
+                      <span className="upload-icon">📎</span> Upload File
+                    </label>
+                    {question.attachment && (
+                      <div className="attachment-info">
+                        <span className="file-name">{question.attachment.name}</span>
+                        <button
+                          className="remove-attachment-btn"
+                          onClick={() => handleQuestionChange(index, 'attachment', null)}
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                );
+              
+              
       case 'camera':
         return questionWrapper(
           <div className="camera-preview">
@@ -270,27 +317,29 @@ const SurveyBuilder = () => {
           </div>
         );
 
-      case 'range':
-        return questionWrapper(
-          <div className="range-preview">
-            <input 
-              type="range" 
-              min="0" 
-              max="100" 
-              defaultValue="50"
-              className="range-input"
-              disabled
-            />
-            <div className="range-labels">
-              <span>Poor</span>
-              <span>Below Average</span>
-              <span>Average</span>
-              <span>Good</span>
-              <span>Excellent</span>
+        case 'range':
+          return questionWrapper(
+            <div className="range-preview">
+              <input 
+                type="range" 
+                min="0" 
+                max="100" 
+                step="1"
+                value={question.rangeValue || 50}
+                onChange={(e) => handleQuestionChange(index, 'rangeValue', e.target.value)}
+                className="range-input"
+              />
+              <div className="range-value">{question.rangeValue || 50}</div>
+              <div className="range-labels">
+                <span>0</span>
+                <span>25</span>
+                <span>50</span>
+                <span>75</span>
+                <span>100</span>
+              </div>
             </div>
-          </div>
-        );
-
+          );
+        
       default:
         return null;
     }
