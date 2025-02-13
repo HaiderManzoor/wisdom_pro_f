@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import Plot from 'react-plotly.js';
 import axios from 'axios';
+import Modal from 'react-modal';
+
 import {
     LineChart, Line, PieChart, Pie, Cell, Tooltip, Legend,
     ResponsiveContainer
@@ -11,6 +13,8 @@ const SurveyInsights = () => {
     const [bubbleChart, setBubbleChart] = useState(null);
     const [sankeyChart, setSankeyChart] = useState(null);
     const [selectedProduct, setSelectedProduct] = useState(null);
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     // Fetch Bubble Chart from Flask API
     useEffect(() => {
@@ -30,11 +34,13 @@ const SurveyInsights = () => {
 
     // Handle Bubble Chart Click
     const handleBubbleClick = (event) => {
-        if (event.points && event.points.length > 0) {
-            const clickedProduct = event.points[0].text;
-            setSelectedProduct(clickedProduct);
-        }
-    };
+      if (event.points && event.points.length > 0) {
+          const clickedProduct = event.points[0].text;
+          setSelectedProduct(clickedProduct);
+          setIsModalOpen(true);  // Open modal when a bubble is clicked
+      }
+  };
+  
 
     // Dummy Data for Other Components
     const metrics = [
@@ -165,30 +171,35 @@ const SurveyInsights = () => {
                             data={bubbleChart.data}
                             layout={bubbleChart.layout}
                             style={{ width: "100%", height: "400px" }}
-                            config={{ displayModeBar: false }} // Hide Toolbar
+                            config={{ displayModeBar: false }} 
                             onClick={handleBubbleClick} // Click event updates Sankey chart
                         />
                     ) : (
                         <p>Loading Bubble Chart...</p>
                     )}
+                    <Modal 
+    isOpen={isModalOpen} 
+    onRequestClose={() => setIsModalOpen(false)}
+    contentLabel="Sankey Chart"
+    className="modal-content"
+    overlayClassName="modal-overlay"
+>
+    <h2>Sentiment Analysis for {selectedProduct}</h2>
+    {sankeyChart ? (
+        <Plot
+            data={sankeyChart.data}
+            layout={sankeyChart.layout}
+            style={{ width: "100%", height: "400px" }}
+            config={{ displayModeBar: false }} 
+        />
+    ) : (
+        <p>Loading Sankey Chart...</p>
+    )}
+    <button onClick={() => setIsModalOpen(false)}>Close</button>
+</Modal>
+
                 </div>
 
-                {/* Sankey Chart - Only Show when a product is selected */}
-                {selectedProduct && (
-                    <div className="chart-container">
-                        <h3>Sentiment Analysis for {selectedProduct}</h3>
-                        {sankeyChart ? (
-                            <Plot
-                                data={sankeyChart.data}
-                                layout={sankeyChart.layout}
-                                style={{ width: "100%", height: "400px" }}
-                                config={{ displayModeBar: false }} // Hide Toolbar
-                            />
-                        ) : (
-                            <p>Loading Sankey Chart...</p>
-                        )}
-                    </div>
-                )}
                 {/* Concerning Points */}
                 <div className="concerning-points-card">
                     <div className="card-header">
@@ -206,26 +217,31 @@ const SurveyInsights = () => {
                     <div className="card-header">
                         <h3>Sentiment Ratio</h3>
                     </div>
+                   
                     <ResponsiveContainer width="100%" height={300}>
-                        <PieChart>
-                            <Pie
-                                data={pieData}
-                                cx="50%"
-                                cy="50%"
-                                labelLine={false}
-                                outerRadius={80}
-                                fill="#8884d8"
-                                dataKey="value"
-                                label
-                            >
-                                {pieData.map((entry, index) => (
-                                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                                ))}
-                            </Pie>
-                            <Legend layout="vertical" align="right" verticalAlign="middle" />
-                            <Tooltip />
-                        </PieChart>
-                    </ResponsiveContainer>
+    <PieChart>
+        <Pie
+            data={pieData}
+            cx="50%"
+            cy="50%"
+            labelLine={false}
+            outerRadius={100}
+            innerRadius={40} 
+            fill="#8884d8"
+            dataKey="value"
+            label={({ name, percent }) => `${name} ${(percent * 100).toFixed(1)}%`} // 🔥 Show percentage labels
+        >
+            {pieData.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+            ))}
+        </Pie>
+        <Legend layout="horizontal" align="center" verticalAlign="bottom" /> // 🔥 Move legend to bottom
+        <Tooltip 
+            contentStyle={{ backgroundColor: "#f5f5f5", borderRadius: "8px" }} // 🔥 Make tooltip modern
+        />
+    </PieChart>
+</ResponsiveContainer>
+
                 </div>
                 
             </div>
