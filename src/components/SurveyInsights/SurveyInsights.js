@@ -1,64 +1,50 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import Plot from 'react-plotly.js';
+import axios from 'axios';
 import {
-    LineChart, Line, ScatterChart, Scatter,
-    XAxis, YAxis, CartesianGrid, Tooltip,
-    PieChart, Pie, Cell, Legend,
+    LineChart, Line, PieChart, Pie, Cell, Tooltip, Legend,
     ResponsiveContainer
 } from 'recharts';
 import './SurveyInsights.css';
 
 const SurveyInsights = () => {
-    // Metrics data with exact values from image
+    const [bubbleChart, setBubbleChart] = useState(null);
+    const [sankeyChart, setSankeyChart] = useState(null);
+    const [selectedProduct, setSelectedProduct] = useState(null);
+
+    // Fetch Bubble Chart from Flask API
+    useEffect(() => {
+        axios.get('http://127.0.0.1:8050/bubble-chart')
+            .then(response => setBubbleChart(response.data))
+            .catch(error => console.error("Error fetching bubble chart:", error));
+    }, []);
+
+    // Fetch Sankey Chart when a product is clicked
+    useEffect(() => {
+        if (selectedProduct) {
+            axios.get(`http://127.0.0.1:8050/sankey-chart/${selectedProduct}`)
+                .then(response => setSankeyChart(response.data))
+                .catch(error => console.error("Error fetching sankey chart:", error));
+        }
+    }, [selectedProduct]);
+
+    // Handle Bubble Chart Click
+    const handleBubbleClick = (event) => {
+        if (event.points && event.points.length > 0) {
+            const clickedProduct = event.points[0].text;
+            setSelectedProduct(clickedProduct);
+        }
+    };
+
+    // Dummy Data for Other Components
     const metrics = [
         { icon: "📊", label: "Total Responses", value: "10" },
         { icon: "⏱", label: "Time Spent (Average)", value: "18s" },
         { icon: "📈", label: "Positive Responses", value: "65%" },
         { icon: "📉", label: "Negative Responses", value: "34%" }
     ];
-
-    // Tab options exactly as shown
     const tabOptions = ['Overall View', 'Sub topics', 'Growth intensity'];
 
-
-const generateTrendData = () => Array.from({ length: 20 }, (_, i) => ({
-  x: i,
-  y: Math.sin(i * 0.5) * 10 + Math.random() * 15 + 40  // More randomness for variation
-}));
-
-
-    // Topic table data with varying stats lengths
-    const topicTableData = [
-        { name: '1. Product', trend: generateTrendData(), stats: 67 },
-        { name: '2. Product', trend: generateTrendData(), stats: 67 },
-        { name: '3. Product', trend: generateTrendData(), stats: 67 },
-        { name: '4. Product', trend: generateTrendData(), stats: 67 },
-        { name: '5. Product', trend: generateTrendData(), stats: 67 },
-        { name: '6. Product', trend: generateTrendData(), stats: 67 },
-        { name: '7. Product', trend: generateTrendData(), stats: 67 },
-        { name: '8. Product', trend: generateTrendData(), stats: 67 },
-        { name: '9. Product', trend: generateTrendData(), stats: 67 },
-        { name: '10. Product', trend: generateTrendData(), stats: 67 },
-
-    ];
-
-    // Scatter plot data matching exactly with image
-    const scatterData = [
-        { x: -80, y: -20, color: '#FF9A9A', label: 'Product' },
-        { x: -40, y: 40, color: '#A5D6A7', label: 'Product' },
-        { x: -40, y: -60, color: '#FF9A9A', label: 'Product' },
-        { x: 0, y: -80, color: '#A5D6A7', label: 'Product' },
-        { x: 20, y: 60, color: '#FF9A9A', label: 'Product' },
-        { x: 30, y: 50, color: '#A5D6A7', label: 'Product' },
-        { x: 60, y: -20, color: '#FF9A9A', label: 'Product' },
-        { x: 70, y: 35, color: '#A5D6A7', label: 'Product' },
-        { x: 80, y: 50, color: '#FF9A9A', label: 'Product' },
-        { x: 80, y: -60, color: '#A5D6A7', label: 'Product' },
-        { x: 100, y: 80, color: '#FF9A9A', label: 'Product' },
-        { x: -100, y: 100, color: '#A5D6A7', label: 'Product' },
-        { x: -100, y: -100, color: '#FF9A9A', label: 'Product' },
-    ];
-
-    // Concerning points
     const concerningPoints = [
         'Work-Life Balance Issues, Long hours, high stress.',
         'Career Growth Concerns, Limited training, slow promotions.',
@@ -68,14 +54,37 @@ const generateTrendData = () => Array.from({ length: 20 }, (_, i) => ({
         'High Turnover Rate - Frequent resignations, dissatisfaction.'
     ];
 
-    const COLORS = ['#A5D6A7', '#FF9A9A', '#FFE082', '#90CAF9'];
+    const generateTrendData = () => Array.from({ length: 20 }, (_, i) => ({
+      x: i,
+      y: Math.sin(i * 0.5) * 10 + Math.random() * 15 + 40
+  }));
+  
+  // Function to generate random stats between 50% and 90%
+  const generateRandomStats = () => Math.floor(Math.random() * 41) + 50;
 
+    // Topic table data
+    const topicTableData = [
+    { name: '1. Customer Satisfaction', trend: generateTrendData(), stats: generateRandomStats() },
+    { name: '2. Service Quality', trend: generateTrendData(), stats: generateRandomStats() },
+    { name: '3. Communication & Responsiveness', trend: generateTrendData(), stats: generateRandomStats() },
+    { name: '4. Product Reliability & Performance', trend: generateTrendData(), stats: generateRandomStats() },
+    { name: '5. Pricing & Value for Money', trend: generateTrendData(), stats: generateRandomStats() },
+    { name: '6. Brand Trust & Reputation', trend: generateTrendData(), stats: generateRandomStats() },
+    { name: '7. Complaint Resolution & Support', trend: generateTrendData(), stats: generateRandomStats() },
+    { name: '8. Loyalty & Retention', trend: generateTrendData(), stats: generateRandomStats() },
+    { name: '9. Personalization & Customization', trend: generateTrendData(), stats: generateRandomStats() },
+    { name: '10. Corporate Social Responsibility', trend: generateTrendData(), stats: generateRandomStats() },
+];
+
+    // Pie Chart Data
     const pieData = [
         { name: 'Positive', value: 50 },
         { name: 'Negative', value: 15 },
         { name: 'Mixed', value: 10 },
         { name: 'Neutral', value: 25 },
     ];
+    const COLORS = ['#A5D6A7', '#FF9A9A', '#FFE082', '#90CAF9'];
+
     return (
         <div className="insights-container">
             {/* Metrics Row */}
@@ -90,7 +99,6 @@ const generateTrendData = () => Array.from({ length: 20 }, (_, i) => ({
                     </div>
                 ))}
             </div>
-
             {/* Tab Options */}
             <div className="tab-strip">
                 {tabOptions.map((tab, index) => (
@@ -113,102 +121,74 @@ const generateTrendData = () => Array.from({ length: 20 }, (_, i) => ({
                     <div className="table-wrapper">
                         <table className="topic-table">
                             <thead>
-                            <tr>
-                                <th>Topics</th>
-                                <th>Trend</th>
-                                <th>Stats</th>
-                            </tr>
+                                <tr>
+                                    <th>Topics</th>
+                                    <th>Trend</th>
+                                    <th>Stats</th>
+                                </tr>
                             </thead>
                             <tbody>
-    {topicTableData.map((topic, index) => (
-        <tr key={index}>
-            <td>{topic.name}</td>
-            <td>
-                <ResponsiveContainer width={100} height={30}>
-                    <LineChart data={topic.trend}>
-                        <Line type="monotone" dataKey="y" stroke="#2196F3" strokeWidth={2} dot={false} />
-                    </LineChart>
-                </ResponsiveContainer>
-            </td>
-            <td>
-                <div className="stats-bar-wrapper">
-                    <div className="stats-bar green-bar" style={{ width: `${topic.stats}%` }}></div>
-                    <div className="stats-bar red-bar" style={{ width: `${100 - topic.stats}%` }}></div>
-                </div>
-                <div className="stats-text">
-                    <span className="green-text">{topic.stats}%</span>
-                    <span className="red-text">{100 - topic.stats}%</span>
-                </div>
-            </td>
-        </tr>
-    ))}
-</tbody>
-
+                                {topicTableData.map((topic, index) => (
+                                    <tr key={index}>
+                                        <td>{topic.name}</td>
+                                        <td>
+                                            <ResponsiveContainer width={100} height={30}>
+                                                <LineChart data={topic.trend}>
+                                                    <Line type="monotone" dataKey="y" stroke="#2196F3" strokeWidth={2} dot={false} />
+                                                </LineChart>
+                                            </ResponsiveContainer>
+                                        </td>
+                                        <td>
+                                            <div className="stats-bar-wrapper">
+                                                <div className="stats-bar green-bar" style={{ width: `${topic.stats}%` }}></div>
+                                                <div className="stats-bar red-bar" style={{ width: `${100 - topic.stats}%` }}></div>
+                                            </div>
+                                            <div className="stats-text">
+                                                <span className="green-text">{topic.stats}%</span>
+                                                <span className="red-text">{100 - topic.stats}%</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
                         </table>
                     </div>
                 </div>
 
-      {/* Topics Scatter Plot */}
-<div className="topics-chart-card">
-    <div className="card-header">
-        <h3>Topics</h3>
-        <select className="trending-dropdown">
-            <option>Trending Topics</option>
-        </select>
-    </div>
-    <ResponsiveContainer width="100%" height={300}>
-        <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis 
-                type="number" 
-                dataKey="x" 
-                domain={[-100, 100]} 
-                tick={{ fontSize: 12 }} 
-            />
-            <YAxis 
-                type="number" 
-                dataKey="y" 
-                domain={[-100, 100]} 
-                tick={{ fontSize: 12 }} 
-            />
-            <Tooltip cursor={{ strokeDasharray: '3 3' }} />
+                {/* Bubble Chart */}
+                <div className="topics-chart-card">
+                    <div className="card-header">
+                        <h3>Topics (Bubble Chart)</h3>
+                    </div>
+                    {bubbleChart ? (
+                        <Plot
+                            data={bubbleChart.data}
+                            layout={bubbleChart.layout}
+                            style={{ width: "100%", height: "400px" }}
+                            config={{ displayModeBar: false }} // Hide Toolbar
+                            onClick={handleBubbleClick} // Click event updates Sankey chart
+                        />
+                    ) : (
+                        <p>Loading Bubble Chart...</p>
+                    )}
+                </div>
 
-            {/* Scatter Plot with Random Circle Sizes & Colors */}
-            <Scatter name="Product" data={scatterData}>
-                {scatterData.map((entry, index) => (
-                    <circle
-                        key={`circle-${index}`}
-                        cx={entry.x}
-                        cy={entry.y}
-                        r={entry.size} // Random circle size
-                        fill={entry.color} // Different colors
-                        opacity="0.7"
-                    />
-                ))}
-            </Scatter>
-
-            {/* Labels Below Each Circle */}
-            {scatterData.map((entry, index) => (
-                <text
-                    key={`label-${index}`}
-                    x={entry.x}
-                    y={entry.y + entry.size + 8} // Positioned below the circle
-                    textAnchor="middle"
-                    fontSize="12"
-                    fill="#333"
-                >
-                    {entry.label}
-                </text>
-            ))}
-        </ScatterChart>
-    </ResponsiveContainer>
-</div>
-
-
-
-
-
-
+                {/* Sankey Chart - Only Show when a product is selected */}
+                {selectedProduct && (
+                    <div className="chart-container">
+                        <h3>Sentiment Analysis for {selectedProduct}</h3>
+                        {sankeyChart ? (
+                            <Plot
+                                data={sankeyChart.data}
+                                layout={sankeyChart.layout}
+                                style={{ width: "100%", height: "400px" }}
+                                config={{ displayModeBar: false }} // Hide Toolbar
+                            />
+                        ) : (
+                            <p>Loading Sankey Chart...</p>
+                        )}
+                    </div>
+                )}
                 {/* Concerning Points */}
                 <div className="concerning-points-card">
                     <div className="card-header">
@@ -221,7 +201,7 @@ const generateTrendData = () => Array.from({ length: 20 }, (_, i) => ({
                     </ul>
                 </div>
 
-                {/* Sentiment Ratio */}
+                {/* Sentiment Ratio (Pie Chart) */}
                 <div className="sentiment-ratio-card">
                     <div className="card-header">
                         <h3>Sentiment Ratio</h3>
@@ -247,10 +227,10 @@ const generateTrendData = () => Array.from({ length: 20 }, (_, i) => ({
                         </PieChart>
                     </ResponsiveContainer>
                 </div>
+                
             </div>
         </div>
     );
 };
 
 export default SurveyInsights;
-
