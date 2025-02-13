@@ -19,26 +19,26 @@ const SurveyInsights = () => {
     // Tab options exactly as shown
     const tabOptions = ['Overall View', 'Sub topics', 'Growth intensity'];
 
-    // Generate dummy data for trend lines
-    const generateTrendData = () => Array(20).fill().map((_, i) => ({
-        x: i,
-        y: Math.sin(i * 0.3) * 10 + 50
-    }));
+
+const generateTrendData = () => Array.from({ length: 20 }, (_, i) => ({
+  x: i,
+  y: Math.sin(i * 0.5) * 10 + Math.random() * 15 + 40  // More randomness for variation
+}));
+
 
     // Topic table data with varying stats lengths
     const topicTableData = [
         { name: '1. Product', trend: generateTrendData(), stats: 67 },
-        { name: '1. Product', trend: generateTrendData(), stats: 67 },
-        { name: '1. Product', trend: generateTrendData(), stats: 67 },
-        { name: '1. Product', trend: generateTrendData(), stats: 67 },
-        { name: '1. Product', trend: generateTrendData(), stats: 67 },
-        { name: '1. Product', trend: generateTrendData(), stats: 67 },
-        { name: '1. Product', trend: generateTrendData(), stats: 67 },
-        { name: '1. Product', trend: generateTrendData(), stats: 67 },
-        { name: '1. Product', trend: generateTrendData(), stats: 67 },
-        { name: '1. Product', trend: generateTrendData(), stats: 67 },
-        { name: '1. Product', trend: generateTrendData(), stats: 67 },
-        { name: '1. Product', trend: generateTrendData(), stats: 67 }
+        { name: '2. Product', trend: generateTrendData(), stats: 67 },
+        { name: '3. Product', trend: generateTrendData(), stats: 67 },
+        { name: '4. Product', trend: generateTrendData(), stats: 67 },
+        { name: '5. Product', trend: generateTrendData(), stats: 67 },
+        { name: '6. Product', trend: generateTrendData(), stats: 67 },
+        { name: '7. Product', trend: generateTrendData(), stats: 67 },
+        { name: '8. Product', trend: generateTrendData(), stats: 67 },
+        { name: '9. Product', trend: generateTrendData(), stats: 67 },
+        { name: '10. Product', trend: generateTrendData(), stats: 67 },
+
     ];
 
     // Scatter plot data matching exactly with image
@@ -120,50 +120,94 @@ const SurveyInsights = () => {
                             </tr>
                             </thead>
                             <tbody>
-                            {topicTableData.map((topic, index) => (
-                                <tr key={index}>
-                                    <td>{topic.name}</td>
-                                    <td>
-                                        <ResponsiveContainer width={100} height={30}>
-                                            <LineChart data={topic.trend}>
-                                                <Line type="monotone" dataKey="y" stroke="#2196F3" strokeWidth={2} dot={false} />
-                                            </LineChart>
-                                        </ResponsiveContainer>
-                                    </td>
-                                    <td>
-                                        <div className="stats-bar-wrapper">
-                                            <div className="stats-bar" style={{ width: `${topic.stats}%` }}/>
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))}
-                            </tbody>
+    {topicTableData.map((topic, index) => (
+        <tr key={index}>
+            <td>{topic.name}</td>
+            <td>
+                <ResponsiveContainer width={100} height={30}>
+                    <LineChart data={topic.trend}>
+                        <Line type="monotone" dataKey="y" stroke="#2196F3" strokeWidth={2} dot={false} />
+                    </LineChart>
+                </ResponsiveContainer>
+            </td>
+            <td>
+                <div className="stats-bar-wrapper">
+                    <div className="stats-bar green-bar" style={{ width: `${topic.stats}%` }}></div>
+                    <div className="stats-bar red-bar" style={{ width: `${100 - topic.stats}%` }}></div>
+                </div>
+                <div className="stats-text">
+                    <span className="green-text">{topic.stats}%</span>
+                    <span className="red-text">{100 - topic.stats}%</span>
+                </div>
+            </td>
+        </tr>
+    ))}
+</tbody>
+
                         </table>
                     </div>
                 </div>
 
-                {/* Topics Scatter Plot */}
-                <div className="topics-chart-card">
-                    <div className="card-header">
-                        <h3>Topics</h3>
-                        <select className="trending-dropdown">
-                            <option>Trending Topics</option>
-                        </select>
-                    </div>
-                    <ResponsiveContainer width="100%" height={300}>
-                        <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis type="number" domain={[-100, 100]}/>
-                            <YAxis type="number" domain={[-100, 100]}/>
-                            <Tooltip cursor={{ strokeDasharray: '3 3' }}/>
-                            <Scatter name="Product" data={scatterData} fill="#8884d8">
-                                {scatterData.map((entry, index) => (
-                                    <Cell key={`cell-${index}`} fill={entry.color}/>
-                                ))}
-                            </Scatter>
-                        </ScatterChart>
-                    </ResponsiveContainer>
-                </div>
+      {/* Topics Scatter Plot */}
+<div className="topics-chart-card">
+    <div className="card-header">
+        <h3>Topics</h3>
+        <select className="trending-dropdown">
+            <option>Trending Topics</option>
+        </select>
+    </div>
+    <ResponsiveContainer width="100%" height={300}>
+        <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis 
+                type="number" 
+                dataKey="x" 
+                domain={[-100, 100]} 
+                tick={{ fontSize: 12 }} 
+            />
+            <YAxis 
+                type="number" 
+                dataKey="y" 
+                domain={[-100, 100]} 
+                tick={{ fontSize: 12 }} 
+            />
+            <Tooltip cursor={{ strokeDasharray: '3 3' }} />
+
+            {/* Scatter Plot with Random Circle Sizes & Colors */}
+            <Scatter name="Product" data={scatterData}>
+                {scatterData.map((entry, index) => (
+                    <circle
+                        key={`circle-${index}`}
+                        cx={entry.x}
+                        cy={entry.y}
+                        r={entry.size} // Random circle size
+                        fill={entry.color} // Different colors
+                        opacity="0.7"
+                    />
+                ))}
+            </Scatter>
+
+            {/* Labels Below Each Circle */}
+            {scatterData.map((entry, index) => (
+                <text
+                    key={`label-${index}`}
+                    x={entry.x}
+                    y={entry.y + entry.size + 8} // Positioned below the circle
+                    textAnchor="middle"
+                    fontSize="12"
+                    fill="#333"
+                >
+                    {entry.label}
+                </text>
+            ))}
+        </ScatterChart>
+    </ResponsiveContainer>
+</div>
+
+
+
+
+
 
                 {/* Concerning Points */}
                 <div className="concerning-points-card">
@@ -209,3 +253,4 @@ const SurveyInsights = () => {
 };
 
 export default SurveyInsights;
+

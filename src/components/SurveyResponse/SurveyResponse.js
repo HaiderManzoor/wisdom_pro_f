@@ -12,36 +12,7 @@ const SurveyResponse = ({ survey, onClose }) => {
         });
     };
 
-    // const handleSubmitResponses = async () => {
-    //     console.log("Submitting responses:", responses);
-    
-    //     if (responses.length === 0) {
-    //         alert("Please answer at least one question.");
-    //         return;
-    //     }
-    
-    //     try {
-    //         const responsePromises = responses.map(response => ({
-    //             question_id: parseInt(response.question_id, 10), // Ensure it's an integer
-    //             user_id: 1, // Assuming user_id is hardcoded
-    //             response: JSON.stringify(response.value) // Ensure it's stored as JSON
-    //         }));
-    
-    //         console.log("Formatted responses:", responsePromises);
-    
-    //         const { error } = await supabase.from('responses').insert(responsePromises);
-    
-    //         if (error) {
-    //             console.error("Error inserting responses:", error);
-    //             return;
-    //         }
-    
-    //         alert("Responses submitted successfully!");
-    //         onClose();
-    //     } catch (error) {
-    //         console.error("Response submission error:", error);
-    //     }
-    // };
+   
     const handleSubmitResponses = async () => {
         try {
             // Ensure you get the latest survey ID

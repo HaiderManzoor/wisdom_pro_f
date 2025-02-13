@@ -187,3 +187,29 @@
 .icon {
   font-size: 16px;
 }
+
+
+.rating-group {
+  display: flex;
+  gap: 8px;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.rating-option {
+  position: relative;
+}
+
+.rating-input {
+  display: none;
+}
+
+.star {
+  color: gray;
+  transition: color 0.2s;
+  font-size: 32px;
+}
+
+.star.selected {
+  color: gold;
+}
