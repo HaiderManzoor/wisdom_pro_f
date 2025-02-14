@@ -15,6 +15,9 @@ const SurveyInsights = () => {
     const [selectedProduct, setSelectedProduct] = useState(null);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedTopic, setSelectedTopic] = useState(null);
+    const [concerningPointsData, setConcerningPointsData] = useState([]);
+
 
     // Fetch Bubble Chart from Flask API
     useEffect(() => {
@@ -40,6 +43,12 @@ const SurveyInsights = () => {
           setIsModalOpen(true);  // Open modal when a bubble is clicked
       }
   };
+  useEffect(() => {
+    const defaultTopic = "Customer Satisfaction";  // Set a default topic
+    setSelectedTopic(defaultTopic);
+    setConcerningPointsData(concerningPointsMapping[defaultTopic]);
+}, []);
+
   
 
     // Dummy Data for Other Components
@@ -51,14 +60,90 @@ const SurveyInsights = () => {
     ];
     const tabOptions = ['Overall View', 'Sub topics', 'Growth intensity'];
 
-    const concerningPoints = [
-        'Work-Life Balance Issues, Long hours, high stress.',
-        'Career Growth Concerns, Limited training, slow promotions.',
-        'Poor Communication',
-        'Misunderstanding/unclear instructions',
-        'Low Employee Morale (lack of recognition, motivation)',
-        'High Turnover Rate - Frequent resignations, dissatisfaction.'
-    ];
+    const concerningPointsMapping = {
+      "Customer Satisfaction": [
+          "Long waiting time for responses",
+          "Unhelpful customer service",
+          "Lack of personalized experience",
+          "Limited self-service options",
+          "Difficult refund process",
+          "Poor follow-up on complaints"
+      ],
+      "Service Quality": [
+          "Inconsistent quality in service",
+          "Lack of attention to detail",
+          "Service delays and errors",
+          "Untrained or inexperienced staff",
+          "Failure to meet customer expectations",
+          "Poor after-sales support"
+      ],
+      "Communication & Responsiveness": [
+          "Slow email responses",
+          "Lack of proactive communication",
+          "Confusing information provided",
+          "Difficulty reaching customer support",
+          "Delayed responses on social media",
+          "Miscommunication between departments"
+      ],
+      "Product Reliability & Performance": [
+          "Frequent product failures",
+          "Short product lifespan",
+          "Performance issues in certain conditions",
+          "Defective products being shipped",
+          "Software/hardware compatibility issues",
+          "Unclear product usage instructions"
+      ],
+      "Pricing & Value for Money": [
+          "Overpriced compared to competitors",
+          "Hidden charges and fees",
+          "Poor refund policies",
+          "Unjustified premium pricing",
+          "Frequent price changes without notice",
+          "Lack of discounts or loyalty rewards"
+      ],
+      "Brand Trust & Reputation": [
+          "Negative brand perception",
+          "Past controversies affecting trust",
+          "Lack of transparency",
+          "Low trust in data security",
+          "Ethical concerns with business practices",
+          "Inconsistent brand messaging"
+      ],
+      "Complaint Resolution & Support": [
+          "Poor handling of complaints",
+          "Delayed refunds and compensations",
+          "Lack of empathy from support staff",
+          "Customers having to repeat issues multiple times",
+          "Long wait times for issue resolution",
+          "No clear escalation process for unresolved complaints"
+      ],
+      "Loyalty & Retention": [
+          "No rewards for loyal customers",
+          "Frequent churn of long-term users",
+          "Unattractive loyalty programs",
+          "Lack of engagement with existing customers",
+          "No exclusive benefits for returning customers",
+          "Complicated membership or subscription processes"
+      ],
+      "Personalization & Customization": [
+          "Lack of customization in services",
+          "One-size-fits-all approach",
+          "No tailored recommendations",
+          "Failure to adapt to customer preferences",
+          "Limited options for product personalization",
+          "Generic customer interactions with no personal touch"
+      ],
+      "Corporate Social Responsibility": [
+          "Environmental concerns",
+          "Unethical supply chain practices",
+          "Lack of social impact initiatives",
+          "No involvement in community development",
+          "Ignoring sustainability efforts",
+          "Failure to address diversity and inclusion concerns"
+      ]
+  };
+  
+  
 
     const generateTrendData = () => Array.from({ length: 20 }, (_, i) => ({
       x: i,
@@ -201,7 +286,40 @@ const SurveyInsights = () => {
                 </div>
 
                 {/* Concerning Points */}
-                <div className="concerning-points-card">
+               <div className="topic-dropdown-container">
+    <label htmlFor="topic-select">Select a Topic:</label>
+    <select 
+        id="topic-select" 
+        value={selectedTopic} // Ensures the dropdown always reflects the selected topic
+        onChange={(e) => {
+            const selected = e.target.value;
+            setSelectedTopic(selected);
+            setConcerningPointsData(concerningPointsMapping[selected] || []);
+        }}
+    >
+        {Object.keys(concerningPointsMapping).map((topic, index) => (
+            <option key={index} value={topic}>{topic}</option>
+        ))}
+    </select>
+    <div className="concerning-points-card">
+    <div className="card-header">
+        <h3>Concerning Points</h3>
+    </div>
+    <ul>
+        {concerningPointsData.length > 0 ? (
+            concerningPointsData.map((point, index) => (
+                <li key={index}>{`${index + 1}. ${point}`}</li>
+            ))
+        ) : (
+            <p>No concerning points available for this topic.</p>
+        )}
+    </ul>
+</div>
+
+</div>
+
+
+                {/* <div className="concerning-points-card">
                     <div className="card-header">
                         <h3>Concerning Points</h3>
                     </div>
@@ -210,7 +328,7 @@ const SurveyInsights = () => {
                             <li key={index}>{`${index + 1}. ${point}`}</li>
                         ))}
                     </ul>
-                </div>
+                </div> */}
 
                 {/* Sentiment Ratio (Pie Chart) */}
                 <div className="sentiment-ratio-card">
