@@ -296,3 +296,16 @@ button {
 button:hover {
   background: #0056b3;
 }
+/* concernig points */
+.topic-dropdown-container {
+  margin-bottom: 15px;
+  font-family: Arial, sans-serif;
+}
+
+#topic-select {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
