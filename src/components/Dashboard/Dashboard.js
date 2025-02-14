@@ -8,8 +8,9 @@ import supabase from '../../supabaseClient';
 const Dashboard = () => {
   const navigate = useNavigate();
   const [surveys, setSurveys] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
   const [filteredSurveys, setFilteredSurveys] = useState([]);
+  const [totalResponses, setTotalResponses] = useState(0); // ✅ NEW: State for total responses
 
   // Fetch surveys from Supabase
   useEffect(() => {
@@ -22,7 +23,7 @@ const Dashboard = () => {
 
         if (error) throw error;
         setSurveys(data);
-        setFilteredSurveys(data); // Initialize with full dataset
+        setFilteredSurveys(data);
       } catch (error) {
         console.error('Error fetching surveys:', error);
       }
@@ -31,12 +32,30 @@ const Dashboard = () => {
     fetchSurveys();
   }, []);
 
+  // ✅ NEW: Fetch total responses count from Supabase
+  useEffect(() => {
+    const fetchTotalResponses = async () => {
+      try {
+        const { count, error } = await supabase
+          .from('responses')
+          .select('*', { count: 'exact', head: true }); // Fetches only count
+
+        if (error) throw error;
+        setTotalResponses(count);
+      } catch (error) {
+        console.error('Error fetching total responses:', error);
+      }
+    };
+
+    fetchTotalResponses();
+  }, []);
+
   // Filter surveys based on search input
   useEffect(() => {
     if (!searchQuery) {
       setFilteredSurveys(surveys);
     } else {
-      const filtered = surveys.filter(survey =>
+      const filtered = surveys.filter((survey) =>
         survey.title.toLowerCase().includes(searchQuery.toLowerCase())
       );
       setFilteredSurveys(filtered);
@@ -68,7 +87,7 @@ const Dashboard = () => {
           <MessageIcon className="message-icon" />
           <div>
             <p>Total Responses Submitted</p>
-            <h3>{/* Fetch from database */}</h3>
+            <h3>{totalResponses}</h3> {/* ✅ FIXED: Displays correct response count */}
           </div>
         </div>
         <div className="stat-card">
