@@ -16,7 +16,7 @@ function App() {
           <Route path="/" element={<Dashboard />} />
           <Route path="/create-survey" element={<CreateSurvey />} />
           <Route path="/survey-form" element={<SurveyForm />} />
-          <Route path="/survey-builder" element={<SurveyBuilder />} />
+          <Route path="/survey-builder" element={<SurveyBuilder />} />  
           <Route path="/insights" element={<SurveyInsights />} />
         </Routes>
       </div>
